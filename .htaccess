@@ -1,0 +1,18 @@
+# PHP 4, Apache 1.
+<FilesMatch "\.(png|gif|jpg|jpeg|wav|mp3|mp4|webm|js|css|eot|svg|ttf|woff|woff2)$">
+  <IfModule mod_headers.c>
+    SetEnvIf Origin "http(s)?://(www\.)?(staging.harrisburg.psu.edu|harrisburg.psu.edu|edit.harrisburg.psu.edu|harrisburg2.vmhost.psu.edu|deploy.harrisburg.psu.edu|storage.googleapis.com|sites.psu.edu|aframe.io|fork-secretive-princess.glitch.me)$" AccessControlAllowOrigin=$0
+    Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+    Header add Access-Control-Allow-Methods "GET,POST,OPTIONS,DELETE,PUT"
+    Header add Access-Control-Allow-Headers "Accept, Content-Type, Content-Length, Accept-Encoding, CUSTOM-ALLOWED-HEADER, origin, x-requested-with"
+    Header merge Vary Origin
+    FileETag None
+    Header unset ETag
+    Header unset Pragma
+    Header unset Cache-Control
+    Header unset Last-Modified
+    Header set Pragma "no-cache"
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+    Header set Expires "Thu, 1 Jan 1970 00:00:00 GMT"
+  </IfModule>
+</FilesMatch>
