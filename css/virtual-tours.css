@@ -113,6 +113,34 @@ a-scene br {
   color: #fff;
 }
 
+#vt-helper {
+  display: none;
+  position: absolute;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #000;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 50vw;
+  height: 50vh;
+  font-size: 2.7rem;
+  padding: 1vh 1vw;
+}
+#vt-helper ul {
+  padding-bottom: 1rem;
+}
+#vt-helper li {
+  list-style-type: initial;
+  margin-left: 2vw;
+}
+#vt-helper img {
+  width: 3.2rem;
+  height: 3.2rem;
+}
+
 a.fas {
   font-family: "Font Awesome 5 Free", 'Open Sans', sans-serif;
   text-decoration: none;
@@ -151,16 +179,25 @@ a.fas:before {
       -ms-user-select: none; /* Internet Explorer/Edge */
           user-select: none;
 }
-.infocardHTML > div {  flex: 1; text-align: left; padding: 1em; }
+.infocardHTML > div {  flex: 1; text-align: left; padding: 1em; position: relative; }
 .infocardHTML img {  max-height: 100%; }
+.infocardHTML .audioInfocard {
+  position: absolute;
+  top: 1em;
+  right: 2em;
+}
+.infocardHTML .audioInfocard button {
+  background-color: #E98300;
+}
 
-#vt-functions {
+#vt-functions,
+#vt-helperOverlay {
   position: absolute;
   bottom: 3.5vh;
   right: 3vw;
   z-index: 50;
-  width: 10vw;
-  height: 40vh;
+  width: 0; /*10vw;*/
+  height: 0; /*40vh;*/
   color: #fff;
   text-align: right;
   justify-content: flex-end;
@@ -175,6 +212,224 @@ a.fas:before {
   font-size: 1.8vw;
   text-shadow: -1px 1px 5px black, 0 2px 5px black, 1px 0 2px black, 0 -1px black;
 }
+#vt-helperOverlay {
+  font-size: 8rem;
+  bottom: 55%;
+  right: 25%;
+}
+#vt-helperOverlay span.fas.fa-mouse,
+#vt-helperOverlay span.fas.fa-hand-point-up {
+  display: none;
+}
+
+#vt-helperOverlay span.fas {
+  padding: 0 2rem;
+}
+#vt-helperOverlay span.fas:before {
+  text-shadow: -1px 1px 5px black, 0 2px 5px black, 1px 0 2px black, 0 -1px black;
+}
+@media screen and ( min-width: 768px ) {
+  #vt-helperOverlay span.fas.fa-mouse {
+    display: block;
+  }
+}
+@media screen and ( max-width: 767px ) {
+  #vt-helperOverlay span.fas.fa-hand-point-up {
+    display: block;
+  }
+}
+/* Animations */
+.blink {
+  animation: blinker 4s linear infinite;
+}
+@keyframes blinker {  
+  30% { opacity: .5; }
+}
+@-moz-keyframes bounceDown {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -moz-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(-1.25rem);
+    transform: translateY(-1.25rem);
+  }
+  60% {
+    -moz-transform: translateY(-.75rem);
+    transform: translateY(-.75rem);
+  }
+}
+@-webkit-keyframes bounceDown {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(-1.25rem);
+    transform: translateY(-1.25rem);
+  }
+  60% {
+    -webkit-transform: translateY(-.75rem);
+    transform: translateY(-.75rem);
+  }
+}
+@keyframes bounceDown {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -moz-transform: translateY(-1.25rem);
+    -ms-transform: translateY(-1.25rem);
+    -webkit-transform: translateY(-1.25rem);
+    transform: translateY(-1.25rem);
+  }
+  60% {
+    -moz-transform: translateY(-.75rem);
+    -ms-transform: translateY(-.75rem);
+    -webkit-transform: translateY(-.75rem);
+    transform: translateY(-.75rem);
+  }
+}
+
+@-webkit-keyframes bounceLeft {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  40% {
+    -webkit-transform: translateX(1.25rem);
+    transform: translateX(1.25rem);
+  }
+  60% {
+    -webkit-transform: translateX(.75rem);
+    transform: translateX(.75rem);
+  }
+}
+@-moz-keyframes bounceLeft {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(1.25rem);
+  }
+  60% {
+    transform: translateX(.75rem);
+  }
+}
+@keyframes bounceLeft {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+  }
+  40% {
+    -ms-transform: translateX(1.25rem);
+    transform: translateX(1.25rem);
+  }
+  60% {
+    -ms-transform: translateX(.75rem);
+    transform: translateX(.75rem);
+  }
+}
+/* /left bounce */
+
+/* right bounce */
+@-webkit-keyframes bounceRight {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  40% {
+    -webkit-transform: translateX(-1.25rem);
+    transform: translateX(-1.25rem);
+  }
+  60% {
+    -webkit-transform: translateX(-1.25rem);
+    transform: translateX(-.75rem);
+  }
+}
+@-moz-keyframes bounceRight {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(-1.25rem);
+  }
+  60% {
+    transform: translateX(-.75rem);
+  }
+}
+@keyframes bounceRight {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+  }
+  40% {
+    -ms-transform: translateX(-1.25rem);
+    transform: translateX(-1.25rem);
+  }
+  60% {
+    -ms-transform: translateX(-.75rem);
+    transform: translateX(-.75rem);
+  }
+}
+/* /right bounce */
+.animateBounceRight {
+  -webkit-animation: bounceRight 4s infinite;
+  animation: bounceRight 4s infinite;
+}
+.animateBounceLeft {
+  -webkit-animation: bounceLeft 4s infinite;
+  animation: bounceLeft 4s infinite;
+}
+.animateBounceDown {
+  -webkit-animation: bounceDown 4s infinite;
+  animation: bounceDown 4s infinite;
+}
+.animateBounceUp {
+  -webkit-animation: animateBounceUp 4s infinite;
+  animation: animateBounceUp 4s infinite;
+}
+
+
 
 .fadeout {
   position: sticky;
@@ -374,16 +629,16 @@ div.infocardFunctions {
   opacity:1;
 }
 
-/* TEMPORARY */
-#audioInfocard { display: none; }
-
-
 @media screen and ( max-width: 960px ) {
   #vt-functions {
     bottom: 8.5vh;
   }
   #vt-headerbar {
     height: 15vh;
+  }
+  #vt-helper {
+    font-size:1.8rem;
+    width: 100%;
   }
 }
 @media screen and ( max-width: 660px ) {
@@ -429,6 +684,9 @@ div.infocardFunctions {
   }
   #vt-navigation {
     width: 85vw;
+  }
+  #vt-helper {
+    height: 75vh;
   }
   #vt-headerbar {
     flex-direction: column;

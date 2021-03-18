@@ -20,11 +20,15 @@ jQuery( document ).ready(function(){
   document.body.appendChild(imgArrow);
   if (jQuery('div#virtualTour').length === 1) {
     var virtualTourData = jQuery('div#virtualTour');
+    var videoSphere = virtualTourData.data('aframe-videosphere');
     var videoSphereRotation = virtualTourData.data('aframe-videosphere-rotate');
+    var imageSphere = virtualTourData.data('aframe-imagesphere');
+    var imageSphereRotation = virtualTourData.data('aframe-image-rotate');
     var logo = virtualTourData.data('aframe-logo');
     var homepage = virtualTourData.data('aframe-homepage');
 
     if (typeof videoSphereRotation === 'undefined') { videoSphereRotation = 0; }
+    if (typeof imageSphereRotation === 'undefined') { imageSphereRotation = 0; }
     if (typeof logo === 'undefined') { logo = 'https://visualidentity.psu.edu/sites/default/themes/penn_state/logo.png'; }
 
     // Add loading screen
@@ -53,6 +57,7 @@ jQuery( document ).ready(function(){
           <a href="https://www.youtube.com/user/PennStateHarrisburg" class="fas fa-video">Campus Videos</a>
           <a href="https://harrisburg.psu.edu/contact-us" class="fas fa-envelope">Contact Us</a>
           <a id="virtour-navigation-button" href="#" class="fas fa-map-marked">Navigate to...</a>
+          <a id="virtour-helper-button" href="#" class="fas fa-question-circle">Help Me</a>
         </div>
       </div>
     `);
@@ -68,7 +73,7 @@ jQuery( document ).ready(function(){
         var idNavigateTo = parseInt(i.substring(i.indexOf('-')+1));
         // Validate Number
         if (isNaN(idNavigateTo)) {
-          console.log('ERROR: No number with data attribute aframeMainMenuNavigateTo');
+          console.log('Note: No number with data attribute aframeMainMenuNavigateTo');
           return true;
         }
         // If array is new, create empty json
@@ -78,32 +83,57 @@ jQuery( document ).ready(function(){
         var varNavigateTo = i.substring(i.indexOf('-'+idNavigateTo)+1+idNavigateTo.toString().length);
         // Validate Variable
         if (new RegExp('Name|Imageurl|Url').test(varNavigateTo) === false) {
-          console.log('ERROR: varNavigateTo data attribute is blank.');
+          console.log('Note: varNavigateTo data attribute is blank.');
           return true;
         }
         arrMainMenuNavigateTo[idNavigateTo][varNavigateTo] = v;
       }
     });
 
-    var mmNavToHTML = '';
-    arrMainMenuNavigateTo.forEach(element => {
-      //Validate each json
-      if ('Name' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Name" in the json (must be exact).'); return false; }
-      if ('Imageurl' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Imageurl" in the json (must be exact).'); return false; }
-      if ('Url' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Url" in the json (must be exact).'); return false; }
-      
-      mmNavToHTML += '<a href="' + element.Url + '" class="location" title="Click to navigate to ' + element.Name + '"><img src="' + element.Imageurl + '" alt="Thumbnail of ' + element.Name + '" />' + element.Name + '</a>';
-    });
-    
-    // Add fadeout if more than 3.
-    if (arrMainMenuNavigateTo.length > 3) {
-      mmNavToHTML += '<div class="fadeout"></div>';
+    // This is altnerative data. Grab via JSON and overwrite above.  If json doesnot exist, then move on.
+    if (typeof virtualTourData.data('aframe-mainmenu-navigate-json') != 'undefined') {
+      jQuery.getJSON(virtualTourData.data('aframe-mainmenu-navigate-json'), function(data) {
+        if (typeof data.navigateto != 'undefined') {
+          data.navigateto.forEach((arrData, arrIndex) => {
+            if (typeof arrData.name != 'undefined' || typeof arrData.url != 'undefined' || typeof arrData.imageurl != 'undefined') {
+              arrMainMenuNavigateTo[arrIndex] = {
+                "Name": arrData.name,
+                "Imageurl": arrData.imageurl,
+                "Url": arrData.url,
+              };
+            }
+            else { 
+              console.log('ERROR: Malform arrData'); 
+            }
+          });
+        }
+      }).always(function(){
+        renderMainMenuNavigationTo(arrMainMenuNavigateTo);
+      });
     }
+    renderMainMenuNavigationTo(arrMainMenuNavigateTo); //$.each() is syncronous while the getJson isn't thus why this appears here again.
 
-    // Add navigation
+    var helperHTML = `
+      <ul>
+        <li>Click/tap and drag the scene around. </li>
+        <li>Click/tap on an <img src="https://harrisburg2.vmhost.psu.edu/virtual-tours/assets/info-icon.png" width="10" height="10" alt="info" /> button for more information about that tour stop.</li>
+        <li>Click/tap on a directional arrow <img src="https://harrisburg2.vmhost.psu.edu/virtual-tours/assets/arrow.png" width="10" height="10" alt="arrow" /> to go to the next stop.</li>
+        <li>Use the <strong>Navigate to...</strong> menu to jump to any stop on the tour. </li>
+      </ul>
+      <p>
+        <span class="fas fa-volume-up"></span>/<span class="fas fa-volume-mute"></span> turn background sound on/off <br />
+        <span class="fas fa-expand"></span>/<span class="fas fa-compress"></span> open/close fullscreen mode <br />
+        <span class="fas fa-play"></span>/<span class="fas fa-stop"></span> play/stop audio
+      </p>
+      <p>
+        <button id="vt-helper-gotIt">Got it!</button>
+      </p>
+    `;
+
+    // Add helper
     jQuery('body').prepend(`
-      <div id="vt-navigation">
-        ` + mmNavToHTML + `
+      <div id="vt-helper">
+        ` + helperHTML + `
       </div>
     `);
 
@@ -113,12 +143,31 @@ jQuery( document ).ready(function(){
     `);
 
     // Add functions for virtual tours
+    if (typeof videoSphere != 'undefined') {
+      jQuery('body').prepend(`
+        <div id="vt-functions">
+          <a href="#" id="videoSphereSound" class="fas fa-volume-mute" title="Unmute"></a>
+          <a href="#" id="fullScreenButton" class="fas fa-expand" title="Expand/Collapse Window"></a>
+        </div>
+      `);
+    } else {
+      jQuery('body').prepend(`
+        <div id="vt-functions">
+          <a href="#" id="fullScreenButton" class="fas fa-expand" title="Expand/Collapse Window"></a>
+        </div>
+      `);
+    }
+
+    // Add helper overlay
     jQuery('body').prepend(`
-      <div id="vt-functions">
-        <a href="#" id="videoSphereSound" class="fas fa-volume-mute" title="Unmute"></a>
-        <a href="#" id="fullScreenButton" class="fas fa-expand" title="Expand/Collapse Window"></a>
+      <div id="vt-helperOverlay">
+        <span class="fas fa-angle-double-left animateBounceLeft"></span>
+        <span id="helperIcon" class="fas fa-mouse blink" title="Pan your camera by click and holding down the left mouse button and dragging the world around (desktop)."></span>
+        <span class="fas fa-hand-point-up blink"></span>
+        <span class="fas fa-angle-double-right animateBounceRight"></span>
       </div>
     `);
+    jQuery(document.body).bind('mousemove keydown click',hideHelperOverlay);
 
     // [a-scene]
     var a_scene = document.createElement('a-scene');
@@ -129,16 +178,42 @@ jQuery( document ).ready(function(){
     var a_assets = document.createElement('a-assets');
     a_assets.setAttribute('id', 'assets');
 
-    var a_assetsVideo = document.createElement('video');
-    a_assetsVideo.setAttribute('id', 'assetsvideo');
-    a_assetsVideo.setAttribute('muted', 'true');
-    a_assetsVideo.setAttribute('webkit-playsinline', true);
-    a_assetsVideo.setAttribute('crossorigin', 'anonymous');
-    a_assetsVideo.setAttribute('playsinline', true);
-    a_assetsVideo.setAttribute('autoplay', true);
-    a_assetsVideo.setAttribute('loop', true);
-    a_assetsVideo.setAttribute('src', virtualTourData.data('aframe-videosphere'));
-    a_assets.appendChild(a_assetsVideo);
+    if (typeof videoSphere != 'undefined') { 
+      var a_assetsVideo = document.createElement('video');
+      a_assetsVideo.setAttribute('id', 'assetsvideo');
+      a_assetsVideo.setAttribute('muted', 'true');
+      a_assetsVideo.setAttribute('webkit-playsinline', true);
+      a_assetsVideo.setAttribute('crossorigin', 'anonymous');
+      a_assetsVideo.setAttribute('playsinline', true);
+      a_assetsVideo.setAttribute('autoplay', true);
+      a_assetsVideo.setAttribute('loop', true);
+      a_assetsVideo.setAttribute('src', videoSphere);
+      a_assets.appendChild(a_assetsVideo);
+
+      // [a-videosphere]
+      var a_videoSphere = document.createElement('a-videosphere');
+      a_videoSphere.setAttribute('autoplay', true);
+      a_videoSphere.setAttribute('preload', 'auto');
+      a_videoSphere.setAttribute('id', 'video-player');
+      a_videoSphere.setAttribute('src', '#assetsvideo');
+      a_videoSphere.setAttribute('rotation', '0 ' + videoSphereRotation + ' 0');
+      a_scene.appendChild(a_videoSphere);
+    }
+
+    if (typeof imageSphere != 'undefined') { 
+      var a_assetsImage = new Image();
+      a_assetsImage.setAttribute('id', 'assetsSky');
+      a_assetsImage.crossOrigin = "Anonymous";
+      a_assetsImage.src = imageSphere;
+      a_assets.appendChild(a_assetsImage);
+
+      // [a-sky]
+      var a_sky = document.createElement('a-sky');
+      a_sky.setAttribute('src', '#assetsSky');
+      a_sky.setAttribute('preload', 'auto');
+      a_sky.setAttribute('rotation', '0 ' + imageSphereRotation + ' 0');
+      a_scene.appendChild(a_sky);
+    }
 
     // Standard assets (see top of code for preload)
     a_assets.appendChild(imgInfo);
@@ -159,14 +234,6 @@ jQuery( document ).ready(function(){
     a_camera.appendChild(a_cameraEntityCam);
     a_scene.appendChild(a_camera);
 
-    // [a-videosphere]
-    var a_videoSphere = document.createElement('a-videosphere');
-    a_videoSphere.setAttribute('autoplay', true);
-    a_videoSphere.setAttribute('preload', 'auto');
-    a_videoSphere.setAttribute('id', 'video-player');
-    a_videoSphere.setAttribute('src', '#assetsvideo');
-    a_videoSphere.setAttribute('rotation', '0 ' + videoSphereRotation + ' 0');
-    a_scene.appendChild(a_videoSphere);
 
     // [a-plane] INFOCARDS
     jQuery('div#virtualTour div[data-infocard-id]').each(function(){
@@ -179,6 +246,7 @@ jQuery( document ).ready(function(){
       var aplaneImage = jQuery(this).data('infocard-image');
       var aplaneLabel = jQuery(this).data('infocard-label');
       var aplaneHeader = jQuery(this).data('infocard-header');
+      var aplaneAudio = jQuery(this).data('infocard-audio');
 
       if (typeof aplaneCoordinate === 'undefined' || aplaneCoordinate === '') {
         return true;
@@ -227,6 +295,10 @@ jQuery( document ).ready(function(){
       if (aplaneHeader !== undefined) {
         jQuery('div#virtualTour div#'+ aplaneId +'.infocardHTML div.infocardContent').prepend('<p class="header">'+ aplaneHeader +'</p>');
       }
+
+      if (aplaneAudio !== undefined) {
+        $('div#virtualTour div#'+ aplaneId +'.infocardHTML div.infocardContent').append('<span class="audioInfocard speakingGuide" data-filename="' + aplaneAudio + '" title="Play/Stop recording"><button class="play fas fa-play-circle"></button></button><button class="stop fas fa-stop-circle"></button></span>');
+      }
     });
 
     // [a-plane] NAVIGATION
@@ -266,7 +338,6 @@ jQuery( document ).ready(function(){
     // Add close button infocards
     jQuery('.infocardHTML').prepend(`
       <div class="infocardFunctions">
-        <a id="audioInfocard" title="Play recording" class="fas fa-volume-up" href="#"></a>
         <a id="closeInfoCard" title="Close infocard" class="fas fa-window-close" href="#"></a>
       </div>
     `);
@@ -275,23 +346,35 @@ jQuery( document ).ready(function(){
     document.body.appendChild(a_scene);
 
     // Timeout to autoplay video (muted of course)
-    setTimeout(e => {
-      jQuery("video").prop('muted', true);
-      var v = document.querySelector('#assetsvideo');
-      v.play();
-    }, 2000);
+    if (typeof videoSphere != 'undefined') { 
+      setTimeout(e => {
+        jQuery("video").prop('muted', true);
+        var v = document.querySelector('#assetsvideo');
+        v.play();
+      }, 2000);
+    }
     
     // Navigation
     jQuery('#virtour-navigation-button').click(function(){
       jQuery('.infocard').hide();
       jQuery('#vt-navigation').show();
+      jQuery('#vt-helper').hide();
+      openCloseMenuBar();
+    });
+
+    // Helper
+    jQuery('#virtour-helper-button').click(function(){
+      jQuery('.infocard').hide();
+      jQuery('#vt-navigation').hide();
+      jQuery('#vt-helper').show();
       openCloseMenuBar();
     });
     
     // Close out
-    jQuery('a-scene, a#closeInfoCard, #nav-icon').click(function(){
+    jQuery('a-scene, a#closeInfoCard, #nav-icon, #vt-helper-gotIt').click(function(){
       jQuery('.infocard').hide();
       jQuery('#vt-navigation').hide();
+      jQuery('#vt-helper').hide();
       openCloseVTFunctions();
     });
 
@@ -319,6 +402,111 @@ jQuery( document ).ready(function(){
     });
   }
 });
+
+$(function() {
+  var audioTags = [];
+
+  function stop(audioTag, $audio) {
+    audioTag.pause();
+    audioTag.currentTime = 0;
+    $('.play', $audio).show();
+    $('.stop', $audio).hide();
+  }
+
+  function stopAll($audio) {
+    audioTags.forEach(function(audioTag) {
+      stop(audioTag);
+    });
+  }
+
+  function addListeners(audioTag, $audio) {
+    $('.play', $audio).click(function() {
+      stopAll($audio);
+      $('.play', $audio).hide();
+      $('.stop', $audio).show();
+      audioTag.play();
+      audioTag.addEventListener('ended', function() {
+        audioTag.currentTime = 0;
+        audioTag.pause();
+        $('.play', $audio).show();
+        $('.stop', $audio).hide();
+      }, false);
+    });
+
+    $('.stop', $audio).click(function() {
+      stop(audioTag, $audio);
+    });
+  }
+
+  function getAudioTag(src) {
+    var audioTag = document.createElement('audio');
+    audioTag.setAttribute('src', src);
+    return audioTag;
+  }
+
+  $(".speakingGuide").each(function() {
+    var audioTag = getAudioTag($(this).data('filename'));
+    $audio = $(this);
+
+    $('.play', $audio).show();
+    $('.stop', $audio).hide();
+
+    addListeners(audioTag, $audio);
+    audioTags.push(audioTag);
+    $audio.append(audioTag);
+  });
+});
+
+function renderMainMenuNavigationTo(arrMainMenuNavigateTo) {
+  var mmNavToHTML = '';
+  arrMainMenuNavigateTo.forEach(element => {
+    console.log(element);
+    //Validate each json
+    if ('Name' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Name" in the json (must be exact).'); return false; }
+    if ('Imageurl' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Imageurl" in the json (must be exact).'); return false; }
+    if ('Url' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Url" in the json (must be exact).'); return false; }
+    
+    mmNavToHTML += '<a href="' + element.Url + '" class="location" title="Click to navigate to ' + element.Name + '"><img src="' + element.Imageurl + '" alt="Thumbnail of ' + element.Name + '" />' + element.Name + '</a>';
+  });
+  
+  // Add fadeout if more than 3.
+  if (arrMainMenuNavigateTo.length > 3) {
+    mmNavToHTML += '<div class="fadeout"></div>';
+  }
+
+  // Add navigation
+  jQuery('body').prepend(`
+    <div id="vt-navigation">
+      ` + mmNavToHTML + `
+    </div>
+  `);
+}
+
+/*
+ * HideHelperOverlay
+ */
+function hideHelperOverlay() {
+  jQuery('#vt-helperOverlay').fadeOut(800);
+  setTimerForHelperOverlay();
+}
+
+/*
+ * ShowHelperOverlay
+ */
+function showHelperOverlay() {
+  jQuery('#vt-helperOverlay').fadeIn(1600);
+}
+
+/*
+ * Timer for Helper Overlay
+ */
+var idleTimer;
+function setTimerForHelperOverlay() {
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(showHelperOverlay,15*1000);
+}
+jQuery(document.body).bind('mousemove keydown click',setTimerForHelperOverlay); //space separated events list that we want to monitor
+setTimerForHelperOverlay(); // Start the timer when the page loads
 
 /*
  * Center Camera
