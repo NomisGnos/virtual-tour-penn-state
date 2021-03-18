@@ -31,6 +31,31 @@ jQuery( document ).ready(function(){
     if (typeof imageSphereRotation === 'undefined') { imageSphereRotation = 0; }
     if (typeof logo === 'undefined') { logo = 'https://visualidentity.psu.edu/sites/default/themes/penn_state/logo.png'; }
 
+    // This is alternative data. Grab via JSON and populate.  If json does not exist, then move on.
+    if (typeof virtualTourData.data('aframe-json-configurations') != 'undefined') {
+      jQuery.getJSON(virtualTourData.data('aframe-json-configurations'), function(data) {
+        if (typeof data.main_menu != 'undefined') {
+          data.main_menu.forEach(arrMMJsonConf => {
+            // Main Menu -- "Navigate to"
+            if (typeof arrMMJsonConf.navigateto != 'undefined') {
+              arrMMJsonConf.navigateto.forEach((arrData, arrIndex) => {
+                if (typeof arrData.Name != 'undefined' || typeof arrData.Url != 'undefined' || typeof arrData.Imageurl != 'undefined') {
+                  arrMainMenuNavigateTo[arrIndex] = arrData;
+                }
+                else { 
+                  console.log('ERROR: Malform arrData'); 
+                }
+              });
+            }
+          });
+        }
+      }).always(function(){
+        // RUN AFTER getJSON because it's async
+        // Render MainMenuNav
+        renderMainMenuNavigationTo(arrMainMenuNavigateTo); 
+      }); //end of getJSON
+    }
+
     // Add loading screen
     jQuery('body').prepend(`
       <div id="loadingScreen">
@@ -89,28 +114,6 @@ jQuery( document ).ready(function(){
         arrMainMenuNavigateTo[idNavigateTo][varNavigateTo] = v;
       }
     });
-
-    // This is altnerative data. Grab via JSON and overwrite above.  If json doesnot exist, then move on.
-    if (typeof virtualTourData.data('aframe-mainmenu-navigate-json') != 'undefined') {
-      jQuery.getJSON(virtualTourData.data('aframe-mainmenu-navigate-json'), function(data) {
-        if (typeof data.navigateto != 'undefined') {
-          data.navigateto.forEach((arrData, arrIndex) => {
-            if (typeof arrData.name != 'undefined' || typeof arrData.url != 'undefined' || typeof arrData.imageurl != 'undefined') {
-              arrMainMenuNavigateTo[arrIndex] = {
-                "Name": arrData.name,
-                "Imageurl": arrData.imageurl,
-                "Url": arrData.url,
-              };
-            }
-            else { 
-              console.log('ERROR: Malform arrData'); 
-            }
-          });
-        }
-      }).always(function(){
-        renderMainMenuNavigationTo(arrMainMenuNavigateTo);
-      });
-    }
     renderMainMenuNavigationTo(arrMainMenuNavigateTo); //$.each() is syncronous while the getJson isn't thus why this appears here again.
 
     var helperHTML = `
