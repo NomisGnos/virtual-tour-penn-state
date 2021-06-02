@@ -27,6 +27,9 @@ Virtual Tour for the Penn State commonwealth campuses + more via Aframe
 ```
 **NOTE: Custom scripts we developed will eventually change to a CDN.  I recommend keeping an eye out on the teams chat (webpro 2021) to get an update when that will happen.
 
+# Getting Started (hard version)
+* You can download the project or do a git clone of my project on your website, however the downfall is if you download the files and host them yourself, you will run into version issues and will forfiet any new features.  Git clone is a good option but reguluarly doing an update yourself would be an inconvience.  I recommend just pointing to the files via EASY VERSION.  Keep in mind I will eventually change the links to a CDN.
+
 # How to generate your own 360 images
 Google Street view app [Google Play](https://play.google.com/store/apps/details?id=com.google.android.street&hl=en_US&gl=US) / [iOS App store](https://apps.apple.com/us/app/google-street-view/id904418768)
 
