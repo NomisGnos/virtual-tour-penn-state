@@ -52,7 +52,7 @@ Recommendation: Host your the JSON file on the same site where the virtual tour 
       data-aframe-logo="https://harrisburg.psu.edu/sites/harrisburg/files/logos/psu_hbo_rgb_2c_3x_1.png"
       data-aframe-json-configurations="https://harrisburg2.vmhost.psu.edu/virtual-tours/harrisburg/configurations.json"
 >
-<!--see ADD HOTSPOTS and ADD NAVIGATION BUTTON and add your own info here.  MUST BE BEFORE THE CLOSING DIV --->
+<!--see ADD HOTSPOTS and ADD NAVIGATION BUTTON and add your own hotspots and nav items BELOW this and MUST BE BEFORE THE CLOSING DIV --->
 </div>
 ```
 * `data-aframe-videosphere` is the location of your video file or image file. Supports full URL or relative url.
