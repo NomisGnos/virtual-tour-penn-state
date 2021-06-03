@@ -51,6 +51,7 @@ Recommendation: Host your the JSON file on the same site where the virtual tour 
       data-aframe-videosphere-rotate="0"
       data-aframe-logo="https://harrisburg.psu.edu/sites/harrisburg/files/logos/psu_hbo_rgb_2c_3x_1.png"
       data-aframe-json-configurations="https://harrisburg2.vmhost.psu.edu/virtual-tours/harrisburg/configurations.json"
+      data-aframe-homepage="/"
 >
 <!--see ADD HOTSPOTS and ADD NAVIGATION BUTTON and add your own hotspots and nav items BELOW this and MUST BE BEFORE THE CLOSING DIV --->
 </div>
@@ -59,6 +60,7 @@ Recommendation: Host your the JSON file on the same site where the virtual tour 
 * `data-aframe-videosphere-rotate` starting from 0 and ends with 360 (degrees) where do you want the user to see first when they load. This rotates the world.
 * `data-aframe-logo` location of your logo image.  It will do it's best to FIT the image within the desired location but try to use a medium size image (not too large that a user needs to download hours for and not to small that it looks pixellated)
 * `data-aframe-json-configurations` location of your JSON file.  See "Generate Your own JSON File to create a 'Navigate to...'" for more info
+* `data-aframe-homepage` when you click on the logo, it will lead you to this url (full/relative url)
 * Close it with `</div>` see template above.
 * IMPORTANT: Before the closing `</div>` you add in your HOTSPOTS and NAVIGATION buttons (see below for more info)
 
