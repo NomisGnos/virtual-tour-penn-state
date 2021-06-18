@@ -12,21 +12,21 @@ Virtual Tour for the Penn State commonwealth campuses + more via Aframe
 ```
 <script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@latest/jquery-ui.min.js"></script>
-<script src="https://harrisburg2.vmhost.psu.edu/virtual-tours/scripts/virtual-tour.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/NomisGnos/virtual-tour-penn-state@latest/scripts/virtual-tour.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/aframe@1.0.4/dist/aframe-master.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aframe-event-set-component@latest/dist/aframe-event-set-component.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aframe-html-shader@latest/dist/aframe-html-shader.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aframe-href-component@latest/index.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/aframe-look-at-component@latest/index.min.js"></script>
-<script src="https://harrisburg2.vmhost.psu.edu/virtual-tours/scripts/aframe-loading-screen-component.js"></script>
-<script src="https://harrisburg2.vmhost.psu.edu/virtual-tours/scripts/aframe-infocard-component.js"></script>
-<script src="https://harrisburg2.vmhost.psu.edu/virtual-tours/scripts/aframe-autoplay-component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/NomisGnos/virtual-tour-penn-state@latest/scripts/aframe-loading-screen-component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/NomisGnos/virtual-tour-penn-state@latest/scripts/aframe-infocard-component.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/NomisGnos/virtual-tour-penn-state@latest/scripts/aframe-autoplay-component.js"></script>
 ```
 * Add the following to the "Footer Scripts"
 ```
-<link rel="stylesheet" href="https://harrisburg2.vmhost.psu.edu/virtual-tours/css/virtual-tours.css">
-<link rel="stylesheet" href="https://harrisburg2.vmhost.psu.edu/virtual-tours/css/fontawesome.all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/NomisGnos/virtual-tour-penn-state@latest/css/virtual-tours.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css">
 ```
 **NOTE: Custom scripts we developed will eventually change to a CDN.  I recommend keeping an eye out on the teams chat (webpro 2021) to get an update when that will happen.
 
