@@ -26,11 +26,13 @@ jQuery( document ).ready(function(){
     var imageSphereRotation = virtualTourData.data('aframe-image-rotate');
     var logo = virtualTourData.data('aframe-logo');
     var homepage = virtualTourData.data('aframe-homepage');
+    var arrMainMenuNavigateTo = new Array();
+    var mmContact, mmCampusGallery, mmVideos;
 
     if (typeof videoSphereRotation === 'undefined') { videoSphereRotation = 0; }
     if (typeof imageSphereRotation === 'undefined') { imageSphereRotation = 0; }
     if (typeof logo === 'undefined') { logo = 'https://visualidentity.psu.edu/sites/default/themes/penn_state/logo.png'; }
-
+        
     // This is alternative data. Grab via JSON and populate.  If json does not exist, then move on.
     if (typeof virtualTourData.data('aframe-json-configurations') != 'undefined') {
       jQuery.getJSON(virtualTourData.data('aframe-json-configurations'), function(data) {
@@ -43,16 +45,22 @@ jQuery( document ).ready(function(){
                   arrMainMenuNavigateTo[arrIndex] = arrData;
                 }
                 else { 
-                  console.log('ERROR: Malform arrData'); 
+                  console.log('ERROR: Malform JSON >> "navigateto"'); 
                 }
               });
             }
+
+            mmContact = arrMMJsonConf.contactus[0];
+            mmCampusGallery = arrMMJsonConf.campusgallery[0];
+            mmVideos = arrMMJsonConf.videos[0];
           });
         }
       }).always(function(){
         // RUN AFTER getJSON because it's async
-        // Render MainMenuNav
         renderMainMenuNavigationTo(arrMainMenuNavigateTo); 
+        renderMainMenuCampusGallery(mmCampusGallery);
+        renderMainMenuContactUs(mmContact);
+        renderMainMenuCampusVideo(mmVideos);
       }); //end of getJSON
     }
 
@@ -78,9 +86,6 @@ jQuery( document ).ready(function(){
           </div>
         </div>
         <div class="menubar">
-          <a href="https://www.flickr.com/photos/penn-state-harrisburg/" class="fas fa-images">Campus Gallery</a>
-          <a href="https://www.youtube.com/user/PennStateHarrisburg" class="fas fa-video">Campus Videos</a>
-          <a href="https://harrisburg.psu.edu/contact-us" class="fas fa-envelope">Contact Us</a>
           <a id="virtour-navigation-button" href="#" class="fas fa-map-marked">Navigate to...</a>
           <a id="virtour-helper-button" href="#" class="fas fa-question-circle">Help Me</a>
         </div>
@@ -90,31 +95,6 @@ jQuery( document ).ready(function(){
     jQuery('#nav-icon').click(function(){
       openCloseMenuBar();
     });
-
-    // Main menu >> "Navigation To..."
-    var arrMainMenuNavigateTo = new Array();
-    jQuery.each(virtualTourData.data(), function(i, v) {
-      if (i.includes('aframeMainmenuNavigateto-')) {
-        var idNavigateTo = parseInt(i.substring(i.indexOf('-')+1));
-        // Validate Number
-        if (isNaN(idNavigateTo)) {
-          console.log('Note: No number with data attribute aframeMainMenuNavigateTo');
-          return true;
-        }
-        // If array is new, create empty json
-        if (typeof arrMainMenuNavigateTo[idNavigateTo] === 'undefined') {
-          arrMainMenuNavigateTo[idNavigateTo] = {};
-        }
-        var varNavigateTo = i.substring(i.indexOf('-'+idNavigateTo)+1+idNavigateTo.toString().length);
-        // Validate Variable
-        if (new RegExp('Name|Imageurl|Url').test(varNavigateTo) === false) {
-          console.log('Note: varNavigateTo data attribute is blank.');
-          return true;
-        }
-        arrMainMenuNavigateTo[idNavigateTo][varNavigateTo] = v;
-      }
-    });
-    renderMainMenuNavigationTo(arrMainMenuNavigateTo); //$.each() is syncronous while the getJson isn't thus why this appears here again.
 
     var helperHTML = `
       <ul>
@@ -463,7 +443,6 @@ $(function() {
 function renderMainMenuNavigationTo(arrMainMenuNavigateTo) {
   var mmNavToHTML = '';
   arrMainMenuNavigateTo.forEach(element => {
-    console.log(element);
     //Validate each json
     if ('Name' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Name" in the json (must be exact).'); return false; }
     if ('Imageurl' in element === false) { console.log('ERROR: MainMenu >> NavigationTo has no "Imageurl" in the json (must be exact).'); return false; }
@@ -484,6 +463,37 @@ function renderMainMenuNavigationTo(arrMainMenuNavigateTo) {
     </div>
   `);
 }
+
+function renderMainMenuContactUs(mmJsonData) {
+  var mmHTML = '';
+  try {
+    mmHTML += '<a href="' + mmJsonData.Url + '" class="fas fa-envelope">Contact Us</a>'; 
+    jQuery('#vt-headerbar .menubar').prepend(mmHTML);    
+  } catch (error) {
+    console.log('ERROR: MainMenu >> campus gallery has no "Url" in the json (must be exact).');
+  }
+}
+
+function renderMainMenuCampusGallery(mmJsonData) {
+  var mmHTML = '';
+  try {
+    mmHTML += '<a href="' + mmJsonData.Url + '" class="fas fa-images">Campus Gallery</a>'; 
+    jQuery('#vt-headerbar .menubar').prepend(mmHTML);    
+  } catch (error) {
+    console.log('ERROR: MainMenu >> campus gallery has no "Url" in the json (must be exact).');
+  }
+}
+
+function renderMainMenuCampusVideo(mmJsonData) {
+  var mmHTML = '';
+  try {
+    mmHTML += '<a href="' + mmJsonData.Url + '" class="fas fa-video">Campus Video</a>'; 
+    jQuery('#vt-headerbar .menubar').prepend(mmHTML);    
+  } catch (error) {
+    console.log('ERROR: MainMenu >> campus gallery has no "Url" in the json (must be exact).');
+  }
+}
+
 
 /*
  * HideHelperOverlay
