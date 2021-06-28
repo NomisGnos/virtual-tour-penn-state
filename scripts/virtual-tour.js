@@ -50,9 +50,9 @@ jQuery( document ).ready(function(){
               });
             }
 
-            mmContact = arrMMJsonConf.contactus[0];
-            mmCampusGallery = arrMMJsonConf.campusgallery[0];
-            mmVideos = arrMMJsonConf.videos[0];
+            try { mmContact = arrMMJsonConf.contactus[0]; } catch(e) { }
+            try { mmCampusGallery = arrMMJsonConf.campusgallery[0]; } catch(e) { }
+            try { mmVideos = arrMMJsonConf.videos[0]; } catch(e) { }
           });
         }
       }).always(function(){
