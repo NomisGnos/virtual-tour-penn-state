@@ -55,8 +55,10 @@ Recommendation: Host your the JSON file on the same site where the virtual tour 
 <!--see ADD HOTSPOTS and ADD NAVIGATION BUTTON and add your own hotspots and nav items BELOW this and MUST BE BEFORE THE CLOSING DIV --->
 </div>
 ```
-* `data-aframe-videosphere` is the location of your video file or image file. Supports full URL or relative url.
-* `data-aframe-videosphere-rotate` starting from 0 and ends with 360 (degrees) where do you want the user to see first when they load. This rotates the world.
+* `data-aframe-videosphere` OR `data-aframe-imageSphere` is the location of your video file or image file. Supports full URL or relative url.
+*  is the location of your image file.
+      data-aframe-imageSphere-rotate="0
+* `data-aframe-videosphere-rotate` OR `data-aframe-imageSphere-rotate` starting from 0 and ends with 360 (degrees) where do you want the user to see first when they load. This rotates the world.
 * `data-aframe-logo` location of your logo image.  It will do it's best to FIT the image within the desired location but try to use a medium size image (not too large that a user needs to download hours for and not to small that it looks pixellated)
 * `data-aframe-json-configurations` location of your JSON file.  See "Generate Your own JSON File to create a 'Navigate to...'" for more info
 * `data-aframe-homepage` when you click on the logo, it will lead you to this url (full/relative url)
