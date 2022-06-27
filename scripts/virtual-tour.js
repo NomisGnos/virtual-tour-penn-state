@@ -122,7 +122,7 @@ jQuery( document ).ready(function(){
 
     // Add Feedback
     jQuery('body').prepend(`
-      <a id="feedback" href="https://harrisburg.psu.edu/virtual-tour-feedback" title="Leave a feedback.">Feedback</a>
+      <a id="feedback" href="https://forms.office.com/r/vzKaK5Txct" title="Leave a feedback.">Feedback</a>
     `);
 
     // Add functions for virtual tours
