@@ -156,6 +156,7 @@ jQuery( document ).ready(function(){
     var a_scene = document.createElement('a-scene');
     a_scene.setAttribute('renderer', {precision: 'mediump'});
     a_scene.setAttribute('loadingscreen', true);
+    a_scene.setAttribute('vr-mode-ui', {enabled: true});
 
     // [a-assets]
     var a_assets = document.createElement('a-assets');
@@ -211,8 +212,7 @@ jQuery( document ).ready(function(){
     a_camera.setAttribute('cursor', { rayOrigin: 'mouse' } );
     a_camera.setAttribute('reverse-mouse-drag', true );
     a_camera.setAttribute('zoom', '1' );
-    a_camera.setAttribute('wasd-controls', { acceleration: 100 } );
-    a_camera.setAttribute('look-controls', true );
+    a_camera.setAttribute('wasd-controls-enabled', false );
 
     var a_cameraEntityCam = document.createElement('a-entity');
     a_camera.appendChild(a_cameraEntityCam);
