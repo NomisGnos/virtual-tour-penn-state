@@ -156,7 +156,6 @@ jQuery( document ).ready(function(){
     var a_scene = document.createElement('a-scene');
     a_scene.setAttribute('renderer', {precision: 'mediump'});
     a_scene.setAttribute('loadingscreen', true);
-    a_scene.setAttribute('vr-mode-ui', {enabled: true});
 
     // [a-assets]
     var a_assets = document.createElement('a-assets');
