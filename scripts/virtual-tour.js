@@ -262,7 +262,7 @@ jQuery( document ).ready(function(){
         a_entLabel.setAttribute('geometry', {primitive: 'plane', height: '.2', width: '1.2' });
         a_entLabel.setAttribute('look-at', '#camera');
         a_entLabel.setAttribute('material', { color: '#001E44' });
-        a_entLabel.setAttribute('text', {color: '#fff', align: 'center', letterSpacing: 2, lineHeight: 50, zOffset: .7, value: aplaneLabel});
+        a_entLabel.setAttribute('text', {font:'kelsonsans', color: '#fff', align: 'center', letterSpacing: 2, lineHeight: 50, zOffset: .7, value: aplaneLabel});
         a_planeInfocard.appendChild(a_entLabel);
       }
 
@@ -310,7 +310,7 @@ jQuery( document ).ready(function(){
         a_entNavLabel.setAttribute('geometry', {primitive: 'plane', height: '.2', width: '1.2' });
         a_entNavLabel.setAttribute('look-at', '#camera');
         a_entNavLabel.setAttribute('material', { color: '#001E44' });
-        a_entNavLabel.setAttribute('text', {color: '#fff', align: 'center', letterSpacing: 2, lineHeight: 50, zOffset: .7, value: aplaneNavLabel});
+        a_entNavLabel.setAttribute('text', {font:'kelsonsans', color: '#fff', align: 'center', letterSpacing: 2, lineHeight: 50, zOffset: .7, value: aplaneNavLabel});
         a_planeNav.appendChild(a_entNavLabel);
       }
 
