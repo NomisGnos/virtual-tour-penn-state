@@ -180,6 +180,7 @@ jQuery( document ).ready(function(){
       a_videoSphere.setAttribute('id', 'video-player');
       a_videoSphere.setAttribute('src', '#assetsvideo');
       a_videoSphere.setAttribute('rotation', '0 ' + videoSphereRotation + ' 0');
+	  a_videoSphere.setAttribute('play-on-click', true);
       a_scene.appendChild(a_videoSphere);
     }
 
@@ -215,7 +216,16 @@ jQuery( document ).ready(function(){
 
     var a_cameraEntityCam = document.createElement('a-entity');
     a_camera.appendChild(a_cameraEntityCam);
+	
+	var a_cameraEntityClickToStart = document.createElement('a-entity');
+	a_cameraEntityClickToStart.setAttribute('id', 'click-to-start');
+    a_cameraEntityClickToStart.setAttribute('position', '0 0 -1.5' );
+    a_cameraEntityClickToStart.setAttribute('text', 'align:center;width:6;wrapCount:100;color: white;value: Click or tap to start tour');
+	a_cameraEntityClickToStart.setAttribute('hide-on-click', '#video');
+    a_camera.appendChild(a_cameraEntityClickToStart);
+	
     a_scene.appendChild(a_camera);
+	
 
 
     // [a-plane] INFOCARDS
