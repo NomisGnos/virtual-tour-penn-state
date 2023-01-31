@@ -14,6 +14,15 @@ imgArrow.setAttribute('id', 'arrow');
 imgArrow.crossOrigin = "Anonymous";
 imgArrow.src = 'https://harrisburg2.vmhost.psu.edu/virtual-tours/assets/arrow.png';
 
+async function getMediaURLForTrack(texture_to_update, passed_url) {
+	await fetch(passed_url, {
+	  method: 'HEAD'
+	})
+	.then((response) => {
+	  texture_to_update.src = response.url
+	});
+}
+
 jQuery( document ).ready(function(){
   document.body.appendChild(imgInfo);
   document.body.appendChild(imgPulse);
@@ -172,6 +181,9 @@ jQuery( document ).ready(function(){
       a_assetsVideo.setAttribute('loop', true);
       a_assetsVideo.setAttribute('src', videoSphere);
       a_assets.appendChild(a_assetsVideo);
+	  
+	  // https://stackoverflow.com/questions/62089037/three-js-webgl-video-texture-cors-issue-on-safari
+	  getMediaURLForTrack(a_assetsVideo, videoSphere);
 
       // [a-videosphere]
       var a_videoSphere = document.createElement('a-videosphere');
@@ -180,7 +192,6 @@ jQuery( document ).ready(function(){
       a_videoSphere.setAttribute('id', 'video-player');
       a_videoSphere.setAttribute('src', '#assetsvideo');
       a_videoSphere.setAttribute('rotation', '0 ' + videoSphereRotation + ' 0');
-	  a_videoSphere.setAttribute('play-on-click', true);
       a_scene.appendChild(a_videoSphere);
     }
 
@@ -216,13 +227,6 @@ jQuery( document ).ready(function(){
 
     var a_cameraEntityCam = document.createElement('a-entity');
     a_camera.appendChild(a_cameraEntityCam);
-	
-	var a_cameraEntityClickToStart = document.createElement('a-entity');
-	a_cameraEntityClickToStart.setAttribute('id', 'click-to-start');
-    a_cameraEntityClickToStart.setAttribute('position', '0 0 -1.5' );
-    a_cameraEntityClickToStart.setAttribute('text', 'align:center;width:6;wrapCount:100;color: white;value: Click or tap to start tour');
-	a_cameraEntityClickToStart.setAttribute('hide-on-click', '#video');
-    a_camera.appendChild(a_cameraEntityClickToStart);
 	
     a_scene.appendChild(a_camera);
 	
